@@ -39,7 +39,7 @@ export default function App() {
         {/* Public Auth Route */}
         <Route 
           path="/login" 
-          element={!user ? <AuthPage onAuthenticated={setUser} /> : <Navigate to="/chat" replace />} 
+          element={!user ? <AuthPage onAuthenticated={setUser} /> : <Navigate to="/dashboard" replace />} 
         />
 
         {/* Dynamic Catch-All Architecture */}
