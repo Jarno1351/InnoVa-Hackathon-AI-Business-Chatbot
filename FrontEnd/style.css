@@ -184,6 +184,20 @@ body {
     flex-wrap: wrap;
 }
 
+.dynamic-details {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    width: 100%;
+}
+
+.dynamic-details .price-tag {
+    justify-self: end;
+    text-align: right;
+    min-width: 120px;
+}
+
 .info-title {
     font-size: 1.05rem;
     font-weight: 600;
@@ -194,6 +208,11 @@ body {
 .info-sub {
     font-size: 0.9rem;
     color: var(--muted-grey);
+}
+
+.info-sub.price-tag {
+    color: var(--primary-accent);
+    font-weight: 700;
 }
 
 /* Center controls column setup */
@@ -261,9 +280,371 @@ body {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
+.delete-item-btn {
+    background: none;
+    border: none;
+    color: rgba(239, 68, 68, 0.9);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.delete-item-btn:hover {
+    background-color: rgba(239, 68, 68, 0.12);
+    transform: translateY(-1px);
+}
+
 .loader {
     text-align: center;
     color: var(--muted-grey);
     padding: 40px;
     font-style: italic;
+}
+/* Styling to signal users that branch cards can be clicked like profile items */
+.clickable-branch-card {
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.clickable-branch-card:hover {
+    background-color: #2e374a; /* Slight brighten shift on active hover states */
+    transform: translateY(-1px);
+}
+
+/* Breadcrumb Context Filtering Banner Container Styling */
+.filter-breadcrumb {
+    background-color: rgba(187, 105, 250, 0.08);
+    border: 1px dashed rgba(187, 105, 250, 0.3);
+    padding: 12px 24px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.filter-breadcrumb span {
+    color: var(--soft-lavender);
+}
+
+.filter-breadcrumb strong {
+    color: var(--pure-white);
+}
+
+#clear-branch-filter {
+    background-color: var(--primary-accent);
+    color: var(--pure-white);
+    border: none;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#clear-branch-filter:hover {
+    background-color: var(--primary-darker);
+}
+/* Container wrap element layout around accordion structures */
+.accordion-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+/* Trigger row cards spacing styling modification rules */
+.clickable-branch-row {
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.15s ease;
+}
+
+.clickable-branch-row:hover {
+    background-color: #2e374a;
+}
+
+/* Chevron button transform container */
+.chevron-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- THE ACCORDION EXPANSION DRAWER LOGIC --- */
+.dropdown-drawer {
+    max-height: 0;
+    overflow: hidden;
+    background-color: #161f30; /* Dark contrast background drop layer for cards */
+    border-radius: 0 0 8px 8px;
+    margin-top: -4px; /* Pull drawer up slightly to stitch seamlessly under header card */
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    border-top: none;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Expanded state variable triggered by JS routing systems */
+.dropdown-drawer.expanded {
+    max-height: 800px; /* High functional threshold bounds to avoid data item clipping */
+}
+
+.drawer-inner-content {
+    padding: 20px 24px 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* --- NESTED ITEM CARDS LOGIC --- */
+.dynamic-nested-card {
+    background-color: #1e2638; /* Slightly lighter tone shift inside the dark container folder */
+    border-color: rgba(187, 105, 250, 0.1);
+    padding: 12px 20px;
+}
+
+.dynamic-nested-card:hover {
+    border-color: var(--primary-accent);
+}
+
+/* Matching the branch icon style color palette for nested vectors */
+.card-icon-wrapper.dynamic-icon {
+    color: var(--pure-white);
+}
+
+/* Empty data structural notification elements */
+.no-items-message {
+    padding: 16px;
+    color: var(--muted-grey);
+    font-size: 0.9rem;
+    font-style: italic;
+    text-align: center;
+}
+/* Styling layout overrides for non-selectable branch cards */
+.static-branch-row {
+    cursor: default; /* Regular pointer arrow to indicate non-clickable surface */
+}
+
+.static-branch-row:hover {
+    border-color: rgba(255, 255, 255, 0.05); /* Strip away purple highlight borders on hover */
+}
+
+.card-icon-wrapper.static-icon {
+    color: var(--pure-white); /* Keeps icons consistently purple on standard lists */
+}
+/* --- CONTROL ACTION BAR CONTAINER --- */
+/* --- ROOT ACTION CONTROL CONTAINER --- */
+.control-action-bar {
+    padding: 24px 40px 8px 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Base button properties shared across components */
+.primary-add-btn, .inline-add-btn {
+    background-color: var(--primary-accent);
+    color: var(--pure-white);
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(187, 105, 250, 0.15);
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.primary-add-btn:hover, .inline-add-btn:hover {
+    background-color: var(--primary-darker);
+}
+
+.primary-add-btn:active, .inline-add-btn:active {
+    transform: scale(0.98);
+}
+
+/* --- DRAWER FOOTER COMPONENT --- */
+.drawer-action-footer {
+    padding: 12px 4px 4px 4px;
+    display: flex;
+    justify-content: flex-start; /* Align with layout card elements directly above */
+}
+
+/* Specialized inline adjustment classes */
+.inline-add-btn {
+    background-color: rgba(187, 105, 250, 0.15); /* Slightly muted container color shift for secondary depth styling */
+    color: var(--soft-lavender);
+    border: 1px dashed rgba(187, 105, 250, 0.4);
+    box-shadow: none;
+    width: 100%; /* Spans across full row block for clean touch/click targets */
+    justify-content: center;
+    padding: 14px;
+}
+
+.inline-add-btn:hover {
+    background-color: var(--primary-accent);
+    color: var(--pure-white);
+    border-style: solid;
+}
+
+/* Spacing fixes */
+.content-panel {
+    padding: 16px 40px 40px 40px; 
+}
+
+.hidden {
+    display: none !important;
+}
+
+.entry-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.modal-window {
+    position: relative;
+    width: min(520px, calc(100% - 32px));
+    padding: 24px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+    z-index: 1;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.modal-close-btn {
+    font-size: 1.75rem;
+    background: transparent;
+    border: none;
+    color: var(--muted-grey);
+    cursor: pointer;
+}
+
+.entry-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: var(--muted-grey);
+    font-size: 0.95rem;
+}
+
+.entry-form input,
+.entry-form textarea,
+.entry-form select {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--pure-white);
+}
+
+.entry-form textarea {
+    resize: vertical;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--pure-white);
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+div#item-fields.hidden,
+div#branch-fields.hidden {
+    display: none;
+}
+
+.entry-modal.success-outline .modal-window {
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.85), 0 32px 80px rgba(0, 0, 0, 0.35);
+    border-color: rgba(34, 197, 94, 0.75);
+}
+
+.confirmation-toast.success-outline {
+    border-color: rgba(34, 197, 94, 0.85);
+    box-shadow: 0 18px 44px rgba(34, 197, 94, 0.18);
+}
+
+.confirmation-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 60;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    max-width: 320px;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+    padding: 14px 16px;
+    color: var(--pure-white);
+    backdrop-filter: blur(20px);
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+.toast-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted-grey);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 6px;
+}
+
+.confirmation-toast.hidden {
+    display: none !important;
+}
+
+.dropdown-drawer.expanded {
+    max-height: 1200px; /* Elevated space to easily fit items + the new footer buttons smoothly */
 }

@@ -1,16 +1,23 @@
 [
   {
+    "id": "p1",
+    "branchId": "b1",
     "name": "Enterprise Cloud Suite",
-    "location": "Version 4.2 • Scalable Architecture",
-    "contact": "License: Annual / Per-User",
-    "status": "Active",
-    "action": "MANAGE"
+    "details": "Version 4.2 • Scalable Architecture / Annual user license",
+    "price": 125000
   },
   {
+    "id": "p2",
+    "branchId": "b1",
     "name": "Kinetic Hardware Hub",
-    "location": "v2 Core Router IoT Array Matrix",
-    "contact": "Warranty: 3-Year Coverage Included",
-    "status": "In Stock",
-    "action": "ORDER"
+    "details": "v2 Core Router Matrix with 3-year warranty",
+    "price": 98000
+  },
+  {
+    "id": "p3",
+    "branchId": "b2",
+    "name": "Satellite Dish Array v4",
+    "details": "Hardware node combo pack for enterprise deployments",
+    "price": 76000
   }
 ]
