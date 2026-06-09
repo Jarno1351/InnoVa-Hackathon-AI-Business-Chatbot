@@ -404,3 +404,67 @@ body {
 .card-icon-wrapper.static-icon {
     color: var(--pure-white); /* Keeps icons consistently purple on standard lists */
 }
+/* --- CONTROL ACTION BAR CONTAINER --- */
+/* --- ROOT ACTION CONTROL CONTAINER --- */
+.control-action-bar {
+    padding: 24px 40px 8px 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Base button properties shared across components */
+.primary-add-btn, .inline-add-btn {
+    background-color: var(--primary-accent);
+    color: var(--pure-white);
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(187, 105, 250, 0.15);
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.primary-add-btn:hover, .inline-add-btn:hover {
+    background-color: var(--primary-darker);
+}
+
+.primary-add-btn:active, .inline-add-btn:active {
+    transform: scale(0.98);
+}
+
+/* --- DRAWER FOOTER COMPONENT --- */
+.drawer-action-footer {
+    padding: 12px 4px 4px 4px;
+    display: flex;
+    justify-content: flex-start; /* Align with layout card elements directly above */
+}
+
+/* Specialized inline adjustment classes */
+.inline-add-btn {
+    background-color: rgba(187, 105, 250, 0.15); /* Slightly muted container color shift for secondary depth styling */
+    color: var(--soft-lavender);
+    border: 1px dashed rgba(187, 105, 250, 0.4);
+    box-shadow: none;
+    width: 100%; /* Spans across full row block for clean touch/click targets */
+    justify-content: center;
+    padding: 14px;
+}
+
+.inline-add-btn:hover {
+    background-color: var(--primary-accent);
+    color: var(--pure-white);
+    border-style: solid;
+}
+
+/* Spacing fixes */
+.content-panel {
+    padding: 16px 40px 40px 40px; 
+}
+.dropdown-drawer.expanded {
+    max-height: 1200px; /* Elevated space to easily fit items + the new footer buttons smoothly */
+}
