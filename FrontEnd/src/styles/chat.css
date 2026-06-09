@@ -1,0 +1,251 @@
+/* ==========================================================================
+   🤖 CHAT VIEW LAYOUT AND AGGREGATION
+   ========================================================================== */
+
+.chat-view {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* --- TOP BAR HEADER --- */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px var(--sidebar-collapsed, 32px);
+  background-color: transparent;
+}
+
+.top-kicker {
+  font-size: 0.75rem;
+  font-weight: 500; /* Made lighter to avoid bulky bolding */
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--purple-bright);
+  margin: 0 0 2px 0;
+  opacity: 0.85;
+}
+
+.top-bar h2 {
+  font-size: 0.85rem;
+  font-weight: 400; /* Clean, thin, readable layout */
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* --- HERO CENTER ELEMENT BANNERS (MATCHING IMAGE_4549B9.PNG) --- */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: -40px; /* Shifts text slightly upward away from your chat box */
+  left: 0;
+  padding: 0 24px;
+  box-sizing: border-box;
+  z-index: 1;
+  pointer-events: none;
+
+  /* 
+    ✨ GEMINI BACKGROUND LIGHTING EFFECT:
+    Creates a highly diffused, ultra-soft radial aura centered right behind the text.
+    It transitions from a deep, transparent purple into your main pitch-black background.
+  */
+  background: radial-gradient(
+    circle at center, 
+    rgba(139, 53, 238, 0.12) 0%,   /* Soft, low-opacity core purple */
+    rgba(94, 28, 160, 0.05) 40%,   /* Fading darker purple mid-boundary */
+    transparent 70%                /* Completely blends away into --bg-main */
+  );
+}
+
+/* "HI I'M" Subtitle Context */
+.intro-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  color: white;
+  margin: 0 0 0 4px 0;
+}
+
+/* "NEL-JAY" Boldless Gradient Title */
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 600; /* Completely removed heavy bolding weight */
+  letter-spacing: -0.01em;
+  margin: 0 0 32px 0;
+  
+  /* Smooth, modern Gemini-style text color flow */
+  background: var(--purple-bright );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Subtle soft ambiance glow instead of harsh background shadows */
+  filter: drop-shadow(0 0 40px rgba(139, 53, 238, 0.15));
+}
+
+/* "What product are you looking for?" Core Question */
+.hero h2 {
+  font-size:2rem;
+  font-weight: 400; /* Light, elegant font face line execution */
+  letter-spacing: -0.02em;
+  margin: 0;
+  max-width: 800px;
+  line-height: 1.25;
+  color: #d3d3d3;
+}
+
+/* --- INPUT CONTAINER FORM --- */
+.chat-input-card {
+  width: 100%;
+  max-width: 760px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  margin: 0 auto 32px auto;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: var(--shadow);
+  z-index: 3;
+}
+
+.chat-input-card:focus-within,
+.chat-input-card.has-text {
+  border-color: rgba(155, 73, 255, 0.5);
+  box-shadow: 0 0 30px rgba(139, 53, 238, 0.15), var(--shadow);
+}
+
+.chat-input-card textarea {
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: none;
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+
+.chat-input-card textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* --- BUTTON ACTIONS TOOLBAR --- */
+.input-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.left-actions, .right-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-icon {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.input-icon:hover {
+  color: var(--purple-soft);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* --- SUBMIT SEND BUTTON --- */
+.send-button {
+  background-color: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.25s transform 0.2s;
+}
+
+.chat-input-card.has-text .send-button {
+  color: var(--purple-bright);
+}
+
+.send-button:hover:not(:disabled) {
+  transform: scale(1.05);
+  color: var(--text-main);
+  background-color: var(--purple-dark);
+}
+
+.send-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* --- ACCESSIBILITY HELPER --- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* --- UTILITY SCROLLBAR OVERRIDE --- */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 53, 238, 0.3);
+}
+
+/* --- ANIMATION SEQUENCES --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes messageSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}

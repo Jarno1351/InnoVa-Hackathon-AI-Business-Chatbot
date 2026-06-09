@@ -1,0 +1,27 @@
+:root {
+  --bg-main: #020202;
+  --bg-panel: #111216;
+  --bg-card: #1b1b21;
+  --bg-card-soft: #222129;
+  --bg-input: #1f1f25;
+  --purple: #8b35ee;
+  --purple-dark: #5e1ca0;
+  --purple-bright: #9b49ff;
+  --purple-soft: #c9add5;
+  --green: #27e69a;
+  --gold: #ffc83d;
+  --text-main: #f3edf8;
+  --text-soft: #d3bddb;
+  --text-muted: #8f829b;
+  --border: rgba(172, 135, 205, 0.22);
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  --sidebar-collapsed: 84px;
+  --sidebar-expanded: 290px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; font-family: "Inter", Arial, sans-serif; background: var(--bg-main); color: var(--text-main); }
+body { overflow-x: hidden; }
+button, textarea, input { font: inherit; }
+button { border: 0; cursor: pointer; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }

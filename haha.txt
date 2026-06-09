@@ -1,0 +1,78 @@
+
+// 🤖 CORE RAG GATEWAY INTERACTION PIPELINE
+export const handleUserMessage = async (req, res) => {
+    try {
+        const { message } = req.body;
+
+        if (!message || !message.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "A non-empty user message text property is required."
+            });
+        }
+
+        // --- STEP 1: PARSE ENTITIES AND INTENTS VIA GEMINI FLASK PIPELINE ---
+        let semanticQuery = message;
+        let maxPrice = null;
+
+        try {
+            const intentResponse = await fetch('http://localhost:8000/api/v1/extract-intent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: message })
+            });
+
+            const intentPayload = await intentResponse.json();
+
+            if (intentPayload.success && intentPayload.data) {
+                // Safely update parameters with structural elements from Gemini 2.5 Flash
+                semanticQuery = intentPayload.data.semanticQuery || message;
+                maxPrice = intentPayload.data.maxPrice !== undefined ? intentPayload.data.maxPrice : null;
+                console.log(`🎯 Entity Extraction Success -> Query: "${semanticQuery}" | Budget Ceiling: ${maxPrice} PHP`);
+            }
+        } catch (intentErr) {
+            console.error("⚠️ Intent Extraction engine skipped or unreachable. Falling back to default message pass...", intentErr.message);
+        }
+
+        // --- STEP 2: FORWARD REFINED PARAMETERS TO RAG ORCHESTRATION PIPELINE ---
+        const pythonChatResponse = await fetch('http://localhost:8000/api/v1/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                question: semanticQuery,
+                maxPrice: maxPrice
+            })
+        });
+
+        const engineResult = await pythonChatResponse.json();
+
+        if (!pythonChatResponse.ok || !engineResult.success) {
+            return res.status(pythonChatResponse.status || 500).json({
+                success: false,
+                message: "Vector hybrid processing cluster encountered a generation error.",
+                error: engineResult.error || "Unknown pipeline breakdown."
+            });
+        }
+
+        // --- STEP 3: RETURN INTEGRATED CHAT AND MAP-DATA OBJECTS TO THE FRONTEND ---
+        return res.status(200).json({
+            success: true,
+            reply: engineResult.reply,
+            stateEvaluated: engineResult.stateEvaluated,
+            highestScore: engineResult.highestScore,
+            hasRelationalData: engineResult.hasRelationalData,
+            matchedBranches: engineResult.matchedBranches,
+            contextUsed: engineResult.contextUsed
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Fatal internal pipeline failure occurred within the Express Chat Gateway.",
+            error: error.message
+        });
+    }
+};
+
+
+this is my controller

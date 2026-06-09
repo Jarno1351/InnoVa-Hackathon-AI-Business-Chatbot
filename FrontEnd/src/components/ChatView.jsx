@@ -1,0 +1,81 @@
+import { useEffect, useRef } from 'react';
+
+export default function ChatView({ messages, inputValue, setInputValue, onSendMessage, isLoading, onOpenSidebar }) {
+  const chatAreaRef = useRef(null);
+
+  useEffect(() => {
+    if (chatAreaRef.current) {
+      chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
+    }
+  }, [messages, isLoading]);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    onSendMessage(inputValue);
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      onSendMessage(inputValue);
+    }
+  }
+
+  const hasText = inputValue.trim().length > 0;
+
+  return (
+    <section className="view-panel chat-view active-view" aria-label="Chat homepage">
+      <header className="top-bar">
+        <button className="mobile-menu-button" type="button" aria-label="Open sidebar" onClick={onOpenSidebar}>
+          <span></span><span></span><span></span>
+        </button>
+        <div>
+          <p className="top-kicker">AI Local Assistant</p>
+          <h2>Local shop recommendations</h2>
+        </div>
+      </header>
+
+      <div className="chat-stage">
+        {messages.length === 0 && (
+          <div className="hero">
+            <p className="intro-text">HI I'M</p>
+            <h1>Nel Jay</h1>
+            <h2>Connecting you with the exact local suppliers and services you need.</h2>
+          </div>
+        )}
+
+        <div className="chat-area custom-scrollbar" ref={chatAreaRef} aria-live="polite">
+          {messages.map((message) => (
+            <div className={`message ${message.sender}`} key={message.id}>{message.text}</div>
+          ))}
+          {isLoading && <div className="message bot">Nel-Jay is typing...</div>}
+        </div>
+      </div>
+
+      <form className={`chat-input-card ${hasText ? 'has-text' : ''}`} onSubmit={handleSubmit}>
+        <label htmlFor="messageInput" className="visually-hidden">Type your message</label>
+        <textarea
+          id="messageInput"
+          rows="1"
+          placeholder="Type your query for Nel-Jay here..."
+          value={inputValue}
+          onChange={(event) => setInputValue(event.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+
+        <div className="input-actions">
+          <div className="left-actions">
+            <button type="button" className="input-icon" aria-label="Add item">+</button>
+            <button type="button" className="input-icon upload-icon" aria-label="Upload file">⇧</button>
+          </div>
+
+          <div className="right-actions">
+            <button type="button" className="input-icon image-icon" aria-label="Add image">▧</button>
+            <button type="button" className="input-icon mic-icon" aria-label="Voice input">🎙</button>
+            <button type="submit" className="send-button" disabled={!hasText || isLoading} aria-label="Send message">➤</button>
+          </div>
+        </div>
+      </form>
+    </section>
+  );
+}
