@@ -286,11 +286,15 @@ export default function MainLayout({ user,setUser, isBooting }) {
         </Routes>
 
         {/* 🛠️ CONDITIONAL DASHBOARD BUTTON: Only visible to authenticated vendors */}
-        {user && (
+        {user ? (
           <button className="dashboard-floating-button" onClick={() => { navigate('/dashboard'); setIsMobileSidebarOpen(false); }} type="button">
             Dashboard
           </button>
-        )}
+        ) : 
+            <button className="dashboard-floating-button" onClick={() => { navigate('/login'); setIsMobileSidebarOpen(false); }} type="button">
+                Login
+            </button>
+        }
       </main>
 
       <RecommendationDrawer
