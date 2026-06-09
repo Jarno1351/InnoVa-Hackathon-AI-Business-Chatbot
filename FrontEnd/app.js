@@ -4,6 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const rootControlBar = document.getElementById("root-control-bar");
     const addBranchRootBtn = document.getElementById("add-branch-root-btn");
 
+    function formatPeso(amount) {
+        if (amount == null) return "";
+        return new Intl.NumberFormat("en-PH", {
+            style: "currency",
+            currency: "PHP",
+            minimumFractionDigits: 2,
+        }).format(amount);
+    }
+
     // Async data fetch router
     async function loadTabContent(tabName) {
         contentPanel.innerHTML = `<div class="loader">Fetching data from server storage...</div>`;
@@ -158,11 +167,19 @@ document.addEventListener("DOMContentLoaded", () => {
         let iconName = type === "products" ? "package" : "cpu";
         const itemLabel = type === "products" ? "Product" : "Service";
 
+        htmlMarkup += `
+            <div class="drawer-action-footer">
+                <button class="inline-add-btn" data-branch-id="${branchId}" data-branch-name="${branchName}">
+                    <i data-lucide="plus"></i> Add ${itemLabel} to ${branchName}
+                </button>
+            </div>
+        `;
+
         if (items.length === 0) {
             htmlMarkup += `<div class="no-items-message">No ${type} available at this branch.</div>`;
         } else {
             items.forEach(item => {
-                const statusClass = item.status.toLowerCase().replace(" ", "-");
+                const priceMarkup = item.price != null ? `<div class="info-sub price-tag">${formatPeso(item.price)}</div>` : "";
                 htmlMarkup += `
                     <div class="row-card dynamic-nested-card">
                         <div class="card-left">
@@ -171,30 +188,14 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                             <div class="card-details">
                                 <div class="info-title">${item.name}</div>
-                                <div class="info-sub">${item.location}</div>
-                                <div class="info-sub">${item.contact}</div>
+                                <div class="info-sub">${item.details}</div>
+                                ${priceMarkup}
                             </div>
-                        </div>
-                        <div class="card-right-controls">
-                            <span class="status-badge ${statusClass}">${item.status}</span>
-                            <button class="action-link-text">${item.action}</button>
-                            <button class="three-dot-menu" aria-label="Options Menu">
-                                <i data-lucide="more-vertical"></i>
-                            </button>
                         </div>
                     </div>
                 `;
             });
         }
-
-        // Prepend or Append the contextual localized button safely at the bottom of this specific drawer view
-        htmlMarkup += `
-            <div class="drawer-action-footer">
-                <button class="inline-add-btn" data-branch-id="${branchId}" data-branch-name="${branchName}">
-                    <i data-lucide="plus"></i> Add ${itemLabel} to ${branchName}
-                </button>
-            </div>
-        `;
 
         container.innerHTML = htmlMarkup;
         lucide.createIcons();

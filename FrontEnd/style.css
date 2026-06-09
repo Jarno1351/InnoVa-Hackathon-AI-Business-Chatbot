@@ -196,6 +196,11 @@ body {
     color: var(--muted-grey);
 }
 
+.info-sub.price-tag {
+    color: var(--primary-accent);
+    font-weight: 700;
+}
+
 /* Center controls column setup */
 .card-right-controls {
     display: flex;
