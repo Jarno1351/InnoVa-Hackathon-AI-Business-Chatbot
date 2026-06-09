@@ -51,6 +51,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function loadData(type) {
+        if (type === "companies") {
+            const response = await fetch(`./data/${type}.json`);
+            if (!response.ok) throw new Error(`Could not load ${type} data`);
+            const jsonData = await response.json();
+            setStoredData(type, jsonData);
+            return jsonData;
+        }
+
         const cached = getStoredData(type);
         
         // If localStorage has data, use it (user edits take priority)
