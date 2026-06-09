@@ -1,0 +1,14 @@
+[
+  {
+    "id": "c1",
+    "name": "Kinetic Industries",
+    "details": "Integrated enterprise solutions for modern infrastructure and cloud operations.",
+    "location": "Metro Manila, Philippines"
+  },
+  {
+    "id": "c2",
+    "name": "Astra Logistics",
+    "details": "End-to-end logistics and supply chain services across Southeast Asia.",
+    "location": "Cebu City, Philippines"
+  }
+]

@@ -447,6 +447,8 @@ body {
     padding: 24px 40px 8px 40px;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: 18px;
 }
 
 /* Base button properties shared across components */

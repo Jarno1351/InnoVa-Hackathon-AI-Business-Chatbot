@@ -12,5 +12,12 @@
     "name": "Fiber Optic Installation",
     "details": "On-site setup and routing with scheduled booking",
     "price": 45000
+  },
+  {
+    "id": "s3",
+    "branchId": "b4",
+    "name": "Cross-Island Delivery Planning",
+    "details": "Logistics planning service for shipping and warehousing",
+    "price": 29500
   }
 ]

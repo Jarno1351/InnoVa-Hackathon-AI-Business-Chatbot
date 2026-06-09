@@ -21,8 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmationToast = document.getElementById("confirmation-toast");
     const toastMessage = document.getElementById("toast-message");
     const toastCloseBtn = document.getElementById("toast-close-btn");
+    const companyName = document.getElementById("company-name");
+    const companyDetailsText = document.getElementById("company-details");
+    const companyLocationText = document.getElementById("company-location");
 
     let currentTab = "branches";
+    let currentCompanyId = "";
 
     function formatPeso(amount) {
         if (amount == null) return "";
@@ -44,13 +48,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadData(type) {
         const cached = getStoredData(type);
-        if (cached) return cached;
-
+        
+        // If localStorage has data, use it (user edits take priority)
+        if (cached && Array.isArray(cached) && cached.length > 0) {
+            return cached;
+        }
+        
+        // Otherwise, fetch from JSON
         const response = await fetch(`./data/${type}.json`);
         if (!response.ok) throw new Error(`Could not load ${type} data`);
-        const data = await response.json();
-        setStoredData(type, data);
-        return data;
+        const jsonData = await response.json();
+        
+        // For branches: ensure all have companyId
+        if (type === "branches") {
+            jsonData.forEach(b => {
+                if (!b.companyId) b.companyId = "c1";
+            });
+        }
+        
+        setStoredData(type, jsonData);
+        return jsonData;
     }
 
     function generateId(prefix, existingItems) {
@@ -62,6 +79,23 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
         return `${prefix}${maxId + 1}`;
+    }
+
+    function renderCompanyHeader(company) {
+        if (!company) return;
+        companyName.textContent = company.name;
+        companyDetailsText.textContent = company.details;
+        companyLocationText.textContent = company.location;
+    }
+
+    async function initCompanyContext() {
+        const companies = await loadData("companies");
+        if (companies && companies.length) {
+            const company = companies[0];
+            currentCompanyId = company.id;
+            renderCompanyHeader(company);
+        }
+        return companies;
     }
 
     function openEntryModal(type, branchId = "", branchName = "") {
@@ -122,6 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const branches = await loadData("branches");
         const newBranch = {
             id: generateId("b", branches),
+            companyId: currentCompanyId,
             name: branchData.name,
             location: branchData.location,
             contact: branchData.contact,
@@ -201,14 +236,13 @@ document.addEventListener("DOMContentLoaded", () => {
         contentPanel.innerHTML = `<div class="loader">Fetching data from server storage...</div>`;
         
         // Show the root "Add Branch" button bar ONLY if we are on the branches tab
-        if (tabName === "branches") {
-            rootControlBar.style.display = "flex";
-        } else {
-            rootControlBar.style.display = "none";
-        }
+        rootControlBar.style.display = "flex";
+        addBranchRootBtn.style.display = tabName === "branches" ? "flex" : "none";
 
         try {
-            const branches = await loadData("branches");
+            await initCompanyContext();
+            const allBranches = await loadData("branches");
+            const branches = allBranches.filter(branch => branch.companyId === currentCompanyId);
             if (tabName === "branches") {
                 renderStaticDirectory(branches);
             } else {

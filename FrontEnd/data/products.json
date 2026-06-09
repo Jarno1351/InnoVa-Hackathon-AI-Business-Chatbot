@@ -19,5 +19,12 @@
     "name": "Satellite Dish Array v4",
     "details": "Hardware node combo pack for enterprise deployments",
     "price": 76000
+  },
+  {
+    "id": "p4",
+    "branchId": "b4",
+    "name": "Regional Delivery Platform",
+    "details": "Fleet routing and logistics software for Southeast Asian operations",
+    "price": 58000
   }
 ]

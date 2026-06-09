@@ -1,6 +1,7 @@
 [
   {
     "id": "b1",
+    "companyId": "c1",
     "name": "Kaufman Main Branch",
     "location": "822 North Oak Street, Kaufman, UT 64958",
     "contact": "(166) 741-9487",
@@ -9,6 +10,7 @@
   },
   {
     "id": "b2",
+    "companyId": "c1",
     "name": "Salt Lake Satellite Office",
     "location": "245 South Temple St, Salt Lake City, UT 84101",
     "contact": "(166) 741-9487",
@@ -17,9 +19,19 @@
   },
   {
     "id": "b3",
+    "companyId": "c1",
     "name": "New York Branch",
     "location": "420 5th Ave, New York, NY 10018",
     "contact": "(166) 741-9487",
+    "status": "Open",
+    "action": "SELECT"
+  },
+  {
+    "id": "b4",
+    "companyId": "c2",
+    "name": "Cebu Operations Center",
+    "location": "4th Floor, Main Tower, Cebu Business Park",
+    "contact": "+63 32 123 4567",
     "status": "Open",
     "action": "SELECT"
   }
