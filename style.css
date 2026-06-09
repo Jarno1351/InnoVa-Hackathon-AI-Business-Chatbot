@@ -1,0 +1,269 @@
+/* Custom Design Token Pallet Map */
+:root {
+    --primary-accent: #bb69fa;
+    --primary-darker: #8249af;
+    --soft-lavender: #ead2fd;
+    --bg-dark-foundation: #0f172a;
+    --surface-dark: #262e3f;
+    --muted-grey: #575c69;
+    --light-grey-divider: #e7e7e9;
+    --pure-white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark-foundation);
+    color: var(--pure-white);
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
+
+/* --- TOP SECTION STYLING --- */
+.top-section {
+    background-color: var(--surface-dark);
+    padding: 40px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    background-color: var(--primary-accent);
+    color: var(--pure-white);
+    font-size: 3.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(187, 105, 250, 0.2);
+}
+
+.company-info h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    color: var(--pure-white);
+}
+
+.company-info p {
+    color: var(--light-grey-divider);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    max-width: 800px;
+}
+
+/* --- BOTTOM SECTION & NAV TAB STYLING --- */
+.bottom-section {
+    background-color: #131c2e; /* Slightly darker shift for content block depth */
+    border-radius: 0 0 12px 12px;
+    min-height: 400px;
+}
+
+.tab-container {
+    background-color: var(--surface-dark);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 40px;
+}
+
+.tab-wrapper {
+    display: flex;
+    gap: 8px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    color: var(--muted-grey);
+    padding: 18px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tab-btn:hover:not(:disabled) {
+    color: var(--pure-white);
+}
+
+.tab-btn.active {
+    color: var(--primary-accent);
+}
+
+/* The active status line logic */
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: var(--primary-accent);
+    border-radius: 3px 3px 0 0;
+}
+
+.tab-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.inline-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* --- INTERACTIVE DYNAMIC CONTENT PANEL --- */
+.content-panel {
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* --- SINGLE CARD LIST ROW UI --- */
+.row-card {
+    background-color: var(--surface-dark);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.row-card:hover {
+    border-color: rgba(187, 105, 250, 0.3);
+}
+
+.card-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+/* Vector icon matching the layout title text color */
+.card-icon-wrapper {
+    color: var(--light-grey-divider);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-details {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.info-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--pure-white);
+    min-width: 220px;
+}
+
+.info-sub {
+    font-size: 0.9rem;
+    color: var(--muted-grey);
+}
+
+/* Center controls column setup */
+.card-right-controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Badge status component styles */
+.status-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+.status-badge.open, .status-badge.active, .status-badge.premium {
+    background-color: rgba(187, 105, 250, 0.15);
+    color: var(--soft-lavender);
+}
+
+.status-badge.closed {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+}
+
+.status-badge.in-stock {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+}
+
+/* Action Trigger Text elements */
+.action-link-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: color 0.15s ease;
+    border: none;
+    background: none;
+}
+
+.action-link-text:hover {
+    color: var(--primary-darker);
+}
+
+/* Vertical Context Menu Menu button trigger */
+.three-dot-menu {
+    background: none;
+    border: none;
+    color: var(--primary-accent);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.three-dot-menu:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.loader {
+    text-align: center;
+    color: var(--muted-grey);
+    padding: 40px;
+    font-style: italic;
+}

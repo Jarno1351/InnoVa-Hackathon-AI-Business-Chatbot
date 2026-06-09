@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinetic Industries Dashboard</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <header class="top-section">
+            <div class="profile-avatar">K</div>
+            <div class="company-info">
+                <h1>KINETIC INDUSTRIES</h1>
+                <p>A leading provider of integrated branches, high-quality products, and professional services across the nation.</p>
+            </div>
+        </header>
+
+        <main class="bottom-section">
+            <nav class="tab-container">
+                <div class="tab-wrapper">
+                    <button class="tab-btn active" data-tab="branches">BRANCHES</button>
+                    <button class="tab-btn" data-tab="products">PRODUCTS</button>
+                    <button class="tab-btn" data-tab="services">SERVICES</button>
+                    <button class="tab-btn" data-tab="about" disabled>ABOUT</button>
+                    <button class="tab-btn" data-tab="more" disabled>
+                        MORE <i data-lucide="chevron-down" class="inline-icon"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <div id="tab-content-panel" class="content-panel">
+                <div class="loader">Loading dynamic data...</div>
+            </div>
+        </main>
+        
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

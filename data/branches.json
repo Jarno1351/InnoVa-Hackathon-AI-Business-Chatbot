@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Kaufman Main Branch",
+    "location": "822 North Oak Street, Kaufman, UT 64958",
+    "contact": "(166) 741-9487",
+    "status": "Open",
+    "action": "EDIT"
+  },
+  {
+    "name": "Salt Lake Satellite Office",
+    "location": "245 South Temple St, Salt Lake City, UT 84101",
+    "contact": "(166) 741-9487",
+    "status": "Closed",
+    "action": "VIEW"
+  },
+  {
+    "name": "New York Branch",
+    "location": "420 5th Ave, New York, NY 10018",
+    "contact": "(166) 741-9487",
+    "status": "Open",
+    "action": "DELETE"
+  }
+]
