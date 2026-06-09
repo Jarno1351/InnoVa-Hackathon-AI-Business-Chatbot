@@ -1,11 +1,13 @@
 [
   {
+    "id": "s1",
     "branchId": "b1",
     "name": "24/7 Managed IT Support",
     "details": "Global Tier-3 diagnostics team with 15-minute SLA response",
     "price": 35000
   },
   {
+    "id": "s2",
     "branchId": "b3",
     "name": "Fiber Optic Installation",
     "details": "On-site setup and routing with scheduled booking",
