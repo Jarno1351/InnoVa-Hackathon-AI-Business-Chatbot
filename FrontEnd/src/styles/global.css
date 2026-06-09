@@ -1035,3 +1035,18 @@ button { border: 0; cursor: pointer; }
   .chat-view { padding-top: 18px; }
   .dashboard-hero { flex-direction: column; align-items: flex-start; }
 }
+
+
+
+
+
+
+
+
+
+
+
+.app-shell.public-guest-mode {
+  margin-left: 0 !important;
+  width: 100% !important;
+}

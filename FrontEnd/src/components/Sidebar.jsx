@@ -79,7 +79,7 @@ export default function Sidebar({
               <path d="M4.7 20.2c.9-3.7 3.6-5.6 7.3-5.6s6.4 1.9 7.3 5.6"></path>
             </svg>
           </span>
-          <span className="sidebar-label">{user?.name || 'Profile'}</span>
+          <span className="sidebar-label">{user?.name || 'Guest'}</span>
         </button>
 
         <button className="settings-button" onClick={onOpenSettings} type="button" aria-label="Settings">
