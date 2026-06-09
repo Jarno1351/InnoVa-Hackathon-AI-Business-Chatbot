@@ -69,10 +69,24 @@ body {
 }
 
 .company-info p {
-    color: var(--light-grey-divider);
+    color: #9ca3af;
     font-size: 1.05rem;
     line-height: 1.5;
     max-width: 800px;
+}
+
+.company-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #9ca3af;
+    font-size: 0.95rem;
+}
+
+.location-icon {
+    width: 16px;
+    height: 16px;
+    color: #9ca3af;
 }
 
 /* --- BOTTOM SECTION & NAV TAB STYLING --- */

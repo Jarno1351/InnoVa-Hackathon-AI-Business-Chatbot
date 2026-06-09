@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!company) return;
         companyName.textContent = company.name;
         companyDetailsText.textContent = company.details;
-        companyLocationText.textContent = company.location;
+        companyLocationText.innerHTML = `<i data-lucide="map-pin" class="location-icon"></i> ${company.location}`;
     }
 
     async function initCompanyContext() {
@@ -578,5 +578,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Default initializer sequence
-    loadTabContent("branches");
+    loadTabContent("branches").then(() => {
+        lucide.createIcons();
+    });
 });
