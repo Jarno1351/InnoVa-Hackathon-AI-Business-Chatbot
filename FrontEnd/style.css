@@ -236,7 +236,8 @@ body {
     color: var(--soft-lavender);
 }
 
-.status-badge.closed {
+.status-badge.closed,
+.status-badge.close {
     background-color: rgba(239, 68, 68, 0.15);
     color: #fca5a5;
 }
@@ -278,6 +279,40 @@ body {
 
 .three-dot-menu:hover {
     background-color: rgba(255, 255, 255, 0.05);
+}
+
+.branch-menu-wrapper {
+    position: relative;
+}
+
+.branch-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 160px;
+    background-color: var(--surface-dark);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    z-index: 20;
+}
+
+.branch-menu-item {
+    width: 100%;
+    border: none;
+    background: none;
+    color: var(--pure-white);
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.branch-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.07);
 }
 
 .delete-item-btn {
@@ -498,6 +533,11 @@ body {
     background-color: var(--primary-accent);
     color: var(--pure-white);
     border-style: solid;
+}
+
+#entry-status {
+    color: #000000;
+    background-color: #ffffff;
 }
 
 /* Spacing fixes */

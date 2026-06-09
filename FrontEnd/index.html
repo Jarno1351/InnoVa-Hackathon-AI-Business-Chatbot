@@ -65,13 +65,13 @@
                     </label>
                     <label>
                         Contact
-                        <input id="entry-contact" type="text" required />
+                        <input id="entry-contact" type="tel" inputmode="numeric" pattern="[0-9]+" title="Numbers only" required />
                     </label>
                     <label>
                         Status
                         <select id="entry-status">
-                            <option>Open</option>
-                            <option>Closed</option>
+                            <option value="Open">Open</option>
+                            <option value="Close">Close</option>
                         </select>
                     </label>
                 </div>

@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const entryPrice = document.getElementById("entry-price");
     const entryType = document.getElementById("entry-type");
     const entryBranchId = document.getElementById("entry-branch-id");
+
+    entryContact.addEventListener("input", () => {
+        entryContact.value = entryContact.value.replace(/\D+/g, "");
+    });
     const cancelEntryBtn = document.getElementById("cancel-entry-btn");
     const closeEntryBtn = document.getElementById("close-entry-btn");
     const branchFields = document.getElementById("branch-fields");
@@ -152,8 +156,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toastCloseBtn.addEventListener("click", hideConfirmation);
 
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest(".branch-menu-wrapper")) {
+            closeBranchMenus();
+        }
+    });
+
+    function closeBranchMenus() {
+        document.querySelectorAll(".branch-menu-dropdown").forEach(menu => menu.classList.add("hidden"));
+        document.querySelectorAll(".branch-menu-toggle").forEach(toggle => toggle.setAttribute("aria-expanded", "false"));
+    }
+
     async function addBranch(branchData) {
         const branches = await loadData("branches");
+        if (branchData.id) {
+            const updatedBranches = branches.map(branch => branch.id === branchData.id ? {
+                ...branch,
+                name: branchData.name,
+                location: branchData.location,
+                contact: branchData.contact,
+                status: branchData.status
+            } : branch);
+            setStoredData("branches", updatedBranches);
+            showConfirmation("Branch updated successfully.");
+            if (currentTab === "branches") {
+                renderStaticDirectory(updatedBranches.filter(branch => branch.companyId === currentCompanyId));
+            }
+            return;
+        }
+
         const newBranch = {
             id: generateId("b", branches),
             companyId: currentCompanyId,
@@ -166,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
         branches.push(newBranch);
         setStoredData("branches", branches);
         if (currentTab === "branches") {
-            renderStaticDirectory(branches);
+            renderStaticDirectory(branches.filter(branch => branch.companyId === currentCompanyId));
         }
     }
 
@@ -183,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setStoredData(type, items);
         showConfirmation(`${type === "products" ? "Product" : "Service"} added successfully.`);
         if (currentTab === type) {
-            await loadTabContent(type);
+            await reloadBranchItems(type, itemData.branchId);
         }
     }
 
@@ -204,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (type === "branches") {
             await addBranch({
+                id: branchId || undefined,
                 name,
                 location: entryLocation.value.trim(),
                 contact: entryContact.value.trim(),
@@ -281,15 +313,86 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <div class="card-right-controls">
                         <span class="status-badge ${statusClass}">${branch.status}</span>
-                        <button class="three-dot-menu" aria-label="Options Menu">
-                            <i data-lucide="more-vertical"></i>
-                        </button>
+                        <div class="branch-menu-wrapper">
+                            <button class="three-dot-menu branch-menu-toggle" aria-label="Branch actions" data-branch-id="${branch.id}" aria-expanded="false">
+                                <i data-lucide="more-vertical"></i>
+                            </button>
+                            <div class="branch-menu-dropdown hidden" data-branch-id="${branch.id}">
+                                <button type="button" class="branch-menu-item edit-branch-btn" data-branch-id="${branch.id}">Edit</button>
+                                <button type="button" class="branch-menu-item delete-branch-btn" data-branch-id="${branch.id}">Delete</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
         });
         contentPanel.innerHTML = htmlMarkup;
         lucide.createIcons();
+
+        const branchMenuToggles = document.querySelectorAll(".branch-menu-toggle");
+        branchMenuToggles.forEach(button => {
+            button.addEventListener("click", (event) => {
+                event.stopPropagation();
+                const branchId = button.getAttribute("data-branch-id");
+                closeBranchMenus();
+                const dropdown = document.querySelector(`.branch-menu-dropdown[data-branch-id="${branchId}"]`);
+                if (dropdown) {
+                    dropdown.classList.toggle("hidden");
+                    const expanded = !dropdown.classList.contains("hidden");
+                    button.setAttribute("aria-expanded", expanded.toString());
+                }
+            });
+        });
+
+        const editBranchButtons = document.querySelectorAll(".edit-branch-btn");
+        editBranchButtons.forEach(button => {
+            button.addEventListener("click", async (event) => {
+                event.stopPropagation();
+                const branchId = button.getAttribute("data-branch-id");
+                closeBranchMenus();
+                await openBranchEditModal(branchId);
+            });
+        });
+
+        const deleteBranchButtons = document.querySelectorAll(".delete-branch-btn");
+        deleteBranchButtons.forEach(button => {
+            button.addEventListener("click", async (event) => {
+                event.stopPropagation();
+                const branchId = button.getAttribute("data-branch-id");
+                closeBranchMenus();
+                await deleteBranch(branchId);
+            });
+        });
+    }
+
+    async function openBranchEditModal(branchId) {
+        const branches = await loadData("branches");
+        const branch = branches.find(b => b.id === branchId);
+        if (!branch) return;
+
+        openEntryModal("branches", branchId, branch.name);
+        entryName.value = branch.name;
+        entryLocation.value = branch.location || "";
+        entryContact.value = branch.contact || "";
+        entryStatus.value = branch.status || "Open";
+    }
+
+    async function deleteBranch(branchId) {
+        const branches = await loadData("branches");
+        const remainingBranches = branches.filter(branch => branch.id !== branchId);
+        setStoredData("branches", remainingBranches);
+
+        const productItems = await loadData("products");
+        const serviceItems = await loadData("services");
+        setStoredData("products", productItems.filter(item => item.branchId !== branchId));
+        setStoredData("services", serviceItems.filter(item => item.branchId !== branchId));
+
+        showConfirmation("Branch deleted successfully.");
+        if (currentTab === "branches") {
+            renderStaticDirectory(remainingBranches.filter(branch => branch.companyId === currentCompanyId));
+        } else {
+            await loadTabContent(currentTab);
+        }
     }
 
     // 2. RENDER STEP: Interactive Accordion view for Products/Services Tabs
@@ -373,6 +476,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Reload items for a specific branch drawer without closing it
+    async function reloadBranchItems(type, branchId) {
+        try {
+            const allItems = await loadData(type);
+            const filteredItems = allItems.filter(item => item.branchId === branchId);
+            const drawer = document.getElementById(`drawer-${branchId}`);
+            const innerContent = drawer.querySelector(".drawer-inner-content");
+            const branchRow = drawer.previousElementSibling;
+            const branchName = branchRow.getAttribute("data-name");
+            renderDropdownItems(filteredItems, innerContent, type, branchId, branchName);
+        } catch (err) {
+            console.error("Failed to reload items:", err);
+        }
+    }
+
     // 3. RENDER STEP: Injects item cards AND the localized add button right inside the drawer
     function renderDropdownItems(items, container, type, branchId, branchName) {
         let htmlMarkup = "";
@@ -432,7 +550,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.stopPropagation();
                 const itemId = button.getAttribute("data-item-id");
                 await deleteItem(type, itemId);
-                await loadTabContent(type);
+                await reloadBranchItems(type, branchId);
             });
         });
     }
