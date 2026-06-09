@@ -51,6 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function loadData(type) {
+        const cached = getStoredData(type);
+
         if (type === "companies") {
             const response = await fetch(`./data/${type}.json`);
             if (!response.ok) throw new Error(`Could not load ${type} data`);
@@ -59,25 +61,53 @@ document.addEventListener("DOMContentLoaded", () => {
             return jsonData;
         }
 
-        const cached = getStoredData(type);
-        
-        // If localStorage has data, use it (user edits take priority)
-        if (cached && Array.isArray(cached) && cached.length > 0) {
-            return cached;
-        }
-        
-        // Otherwise, fetch from JSON
-        const response = await fetch(`./data/${type}.json`);
-        if (!response.ok) throw new Error(`Could not load ${type} data`);
-        const jsonData = await response.json();
-        
-        // For branches: ensure all have companyId
+        // Load JSON for branches always, but keep user-added branches from cache.
         if (type === "branches") {
+            const response = await fetch(`./data/${type}.json`);
+            if (!response.ok) throw new Error(`Could not load ${type} data`);
+            const jsonData = await response.json();
             jsonData.forEach(b => {
                 if (!b.companyId) b.companyId = "c1";
             });
+
+            if (cached && Array.isArray(cached) && cached.length > 0) {
+                const jsonBranchIds = new Set(jsonData.map(branch => branch.id));
+                const userAddedBranches = cached.filter(branch => !jsonBranchIds.has(branch.id) && branch.source === "local");
+                const mergedBranches = [...jsonData, ...userAddedBranches];
+                // Remove any legacy branches that do not match the JSON source and are not marked as user-created.
+                setStoredData(type, mergedBranches);
+                return mergedBranches;
+            }
+
+            setStoredData(type, jsonData);
+            return jsonData;
         }
-        
+
+        if (type === "products" || type === "services") {
+            const response = await fetch(`./data/${type}.json`);
+            if (!response.ok) throw new Error(`Could not load ${type} data`);
+            const jsonData = await response.json();
+
+            if (cached && Array.isArray(cached) && cached.length > 0) {
+                const jsonItemIds = new Set(jsonData.map(item => item.id));
+                const userAddedItems = cached.filter(item => !jsonItemIds.has(item.id) && item.source === "local");
+                const mergedItems = [...jsonData, ...userAddedItems];
+                setStoredData(type, mergedItems);
+                return mergedItems;
+            }
+
+            setStoredData(type, jsonData);
+            return jsonData;
+        }
+
+        // For other types, use cache first, then JSON fallback.
+        if (cached && Array.isArray(cached) && cached.length > 0) {
+            return cached;
+        }
+
+        const response = await fetch(`./data/${type}.json`);
+        if (!response.ok) throw new Error(`Could not load ${type} data`);
+        const jsonData = await response.json();
         setStoredData(type, jsonData);
         return jsonData;
     }
@@ -200,7 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
             location: branchData.location,
             contact: branchData.contact,
             status: branchData.status,
-            action: "SELECT"
+            action: "SELECT",
+            source: "local"
         };
         branches.push(newBranch);
         setStoredData("branches", branches);
@@ -216,7 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
             branchId: itemData.branchId,
             name: itemData.name,
             details: itemData.details,
-            price: Number(itemData.price)
+            price: Number(itemData.price),
+            source: "local"
         };
         items.push(newItem);
         setStoredData(type, items);
