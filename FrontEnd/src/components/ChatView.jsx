@@ -1,23 +1,50 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function ChatView({ messages, inputValue, setInputValue, onSendMessage, isLoading, onOpenSidebar }) {
   const chatAreaRef = useRef(null);
+  const [loadingStep, setLoadingStep] = useState(0);
 
+  // Array of dynamic tasks the AI performs to boost perceived UI/UX speed
+  const loadingTasks = [
+    "Thinking...",
+    "Searching local database...",
+    "Analyzing top-rated suppliers...",
+    "Verifying available services...",
+    "Formulating recommendations..."
+  ];
+
+  // Auto-scroll mechanism
   useEffect(() => {
     if (chatAreaRef.current) {
       chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
 
+  // Rotates through loading tasks sequentially while isLoading is true
+  useEffect(() => {
+    let interval;
+    if (isLoading) {
+      setLoadingStep(0); // Reset to first task when loading begins
+      interval = setInterval(() => {
+        setLoadingStep((prevStep) => (prevStep + 1) % loadingTasks.length);
+      }, 1800); // Change tasks every 1.8 seconds for optimal readability
+    }
+    return () => clearInterval(interval);
+  }, [isLoading]);
+
   function handleSubmit(event) {
     event.preventDefault();
-    onSendMessage(inputValue);
+    if (inputValue.trim()) {
+      onSendMessage(inputValue);
+    }
   }
 
   function handleKeyDown(event) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      onSendMessage(inputValue);
+      if (inputValue.trim()) {
+        onSendMessage(inputValue);
+      }
     }
   }
 
@@ -46,9 +73,18 @@ export default function ChatView({ messages, inputValue, setInputValue, onSendMe
 
         <div className="chat-area custom-scrollbar" ref={chatAreaRef} aria-live="polite">
           {messages.map((message) => (
-            <div className={`message ${message.sender}`} key={message.id}>{message.text}</div>
+            <div className={`message ${message.sender}`} key={message.id}>
+              {message.text}
+            </div>
           ))}
-          {isLoading && <div className="message bot">Nel-Jay is typing...</div>}
+          
+          {/* Dynamic, multi-task AI loading indicator */}
+          {isLoading && (
+            <div className="message bot ai-status-loading">
+              <span className="status-pulse-dot"></span>
+              <span className="status-text">{loadingTasks[loadingStep]}</span>
+            </div>
+          )}
         </div>
       </div>
 

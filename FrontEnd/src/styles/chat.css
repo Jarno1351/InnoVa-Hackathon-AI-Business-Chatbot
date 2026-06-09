@@ -249,3 +249,34 @@
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.ai-status-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-muted) !important;
+  font-style: italic;
+  transition: all 0.3s ease-in-out;
+}
+
+.status-pulse-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--purple-bright);
+  border-radius: 50%;
+  animation: statusPulse 1.2s infinite ease-in-out;
+}
+
+.status-text {
+  animation: textFadeIn 0.4s ease-out forwards;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 4px var(--purple-bright)); }
+}
+
+@keyframes textFadeIn {
+  from { opacity: 0; transform: translateX(-4px); }
+  to { opacity: 1; transform: translateX(0); }
+}
