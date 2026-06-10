@@ -907,7 +907,16 @@ button { border: 0; cursor: pointer; }
 .auth-slide,
 .auth-dots { position: relative; z-index: 1; }
 .auth-brand { display: flex; align-items: center; gap: 12px; font-weight: 900; letter-spacing: .08em; }
-.auth-logo { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--purple-bright), var(--purple)); display: grid; place-items: center; color: white; }
+.auth-logo { border-radius: 12px; display: flex; align-items: center; color: white; 
+  gap: 12px;
+}
+.auth-logo img {
+  width: 40px;
+  aspect-ratio: 1/1;
+}
+.auth-logo span {
+  font-size: 20px;
+}
 .auth-slide { display: flex; flex-direction: column; gap: 16px; }
 .auth-badge { width: fit-content; border: 1px solid; padding: 6px 10px; border-radius: 9px; font-size: .66rem; font-weight: 900; letter-spacing: .12em; }
 .auth-slide h2 { margin: 0; color: white; font-size: clamp(1.5rem, 2.6vw, 2.2rem); line-height: 1.05; letter-spacing: -.04em; }
@@ -1049,4 +1058,4 @@ button { border: 0; cursor: pointer; }
 .app-shell.public-guest-mode {
   margin-left: 0 !important;
   width: 100% !important;
-}
+} 

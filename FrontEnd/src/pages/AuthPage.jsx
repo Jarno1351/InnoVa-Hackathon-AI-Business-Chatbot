@@ -90,8 +90,11 @@ export default function AuthPage({ onAuthenticated }) {
       <div className="auth-card">
         <section className="auth-carousel">
           <div className="auth-brand">
-            <div className="auth-logo">N</div>
-            <span>Nel-Jay</span>
+            <div className="auth-logo">
+              <img src="../../public/logo.png" alt="" />
+                          <span>Nel-Jay</span>
+
+            </div>
           </div>
 
           <div className="auth-slide">
