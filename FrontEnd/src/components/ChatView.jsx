@@ -124,8 +124,11 @@ export default function ChatView({ messages, inputValue, setInputValue, onSendMe
         <div className="chat-area custom-scrollbar" ref={chatAreaRef} aria-live="polite">
             {displayMessages.map((message) => (
               /* Outer wrapper controls row alignment (left vs right) */
-              <div className={`message-wrapper ${message.sender}`} key={message.id}>
-                <div className={`message ${message.sender}`}>
+              <div
+                className={`message-wrapper ${message.sender} message-wrapper--${message.sender}`}
+                key={message.id}
+              >
+                <div className={`message ${message.sender} message--${message.sender}`}>
                   {message.text}
                   
                   {message.sender === 'bot' && message.recommendations && (
@@ -144,8 +147,8 @@ export default function ChatView({ messages, inputValue, setInputValue, onSendMe
             ))}
             
             {isLoading && (
-              <div className="message-wrapper bot">
-                <div className="message bot ai-status-loading">
+              <div className="message-wrapper bot message-wrapper--bot">
+                <div className="message bot message--bot ai-status-loading">
                   <span className="status-pulse-dot"></span>
                   <span className="status-text">{loadingTasks[loadingStep]}</span>
                 </div>
