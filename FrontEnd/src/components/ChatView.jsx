@@ -1,10 +1,62 @@
 import { useEffect, useRef, useState } from 'react';
 
-export default function ChatView({ messages, inputValue, setInputValue, onSendMessage, isLoading, onOpenSidebar }) {
+// 🧪 STATIC TEST DATA: Simulates your real backend endpoint structures
+const STATIC_TEST_MESSAGES = [
+  {
+    id: "test-1",
+    sender: "user",
+    text: "hi"
+  },
+  {
+    id: "test-2",
+    sender: "bot",
+    text: "Hello! How can I assist you today with finding businesses or services in Valencia City?",
+    recommendations: null // Normal conversation state
+  },
+  {
+    id: "test-3",
+    sender: "user",
+    text: "hi im looking for a keyboard, however my budget is only 7k php"
+  },
+  {
+    id: "test-4",
+    sender: "bot",
+    text: "Yes, we have a black keyboard available at CMU Depot Main, Valencia City p9 Branch, for 5450 PHP. This is within your budget of 7000 PHP.",
+    // Mocking an adapted recommendation object layout for your drawer component
+    recommendations: [
+      {
+        id: "6a27b6c519056c43945c7d62",
+        name: "CMU Depot Main",
+        match: "Keyboard Black",
+        category: "Electronics",
+        description: "Premium mechanical and office keyboards located near Valencia City P9 Branch.",
+        address: "Valencia City, P9 Branch, Bukidnon",
+        rating: "4.8",
+        reviews: "124",
+        availability: "In Stock",
+        icon: "⌨️",
+        product: {
+          name: "Keyboard Black",
+          description: "High durability layout, sleek matte black finish.",
+          price: "5450 PHP",
+          oldPrice: "6200 PHP",
+          rating: "4.8",
+          reviews: "124",
+          specs: ["Color: Black", "Connection: Wired USB", "Layout: Full Size"],
+          supplierContact: "Contact CMU Depot desk for institutional reservation."
+        }
+      }
+    ]
+  }
+];
+
+export default function ChatView({ messages, inputValue, setInputValue, onSendMessage, isLoading, onOpenSidebar, onViewRecommendations }) {
   const chatAreaRef = useRef(null);
   const [loadingStep, setLoadingStep] = useState(0);
 
-  // Array of dynamic tasks the AI performs to boost perceived UI/UX speed
+  // 🧪 Local fallback state switch: uses parent live hook unless it is an empty run, then uses static messages
+  const displayMessages = messages.length > 0 ? messages : messages;
+
   const loadingTasks = [
     "Thinking...",
     "Searching local database...",
@@ -13,21 +65,19 @@ export default function ChatView({ messages, inputValue, setInputValue, onSendMe
     "Formulating recommendations..."
   ];
 
-  // Auto-scroll mechanism
   useEffect(() => {
     if (chatAreaRef.current) {
       chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [displayMessages, isLoading]);
 
-  // Rotates through loading tasks sequentially while isLoading is true
   useEffect(() => {
     let interval;
     if (isLoading) {
-      setLoadingStep(0); // Reset to first task when loading begins
+      setLoadingStep(0);
       interval = setInterval(() => {
         setLoadingStep((prevStep) => (prevStep + 1) % loadingTasks.length);
-      }, 1800); // Change tasks every 1.8 seconds for optimal readability
+      }, 1800);
     }
     return () => clearInterval(interval);
   }, [isLoading]);
@@ -63,7 +113,7 @@ export default function ChatView({ messages, inputValue, setInputValue, onSendMe
       </header>
 
       <div className="chat-stage">
-        {messages.length === 0 && (
+        {displayMessages.length === 0 && (
           <div className="hero">
             <p className="intro-text">HI I'M</p>
             <h1>Nel Jay</h1>
@@ -72,20 +122,36 @@ export default function ChatView({ messages, inputValue, setInputValue, onSendMe
         )}
 
         <div className="chat-area custom-scrollbar" ref={chatAreaRef} aria-live="polite">
-          {messages.map((message) => (
-            <div className={`message ${message.sender}`} key={message.id}>
-              {message.text}
-            </div>
-          ))}
-          
-          {/* Dynamic, multi-task AI loading indicator */}
-          {isLoading && (
-            <div className="message bot ai-status-loading">
-              <span className="status-pulse-dot"></span>
-              <span className="status-text">{loadingTasks[loadingStep]}</span>
-            </div>
-          )}
-        </div>
+            {displayMessages.map((message) => (
+              /* Outer wrapper controls row alignment (left vs right) */
+              <div className={`message-wrapper ${message.sender}`} key={message.id}>
+                <div className={`message ${message.sender}`}>
+                  {message.text}
+                  
+                  {message.sender === 'bot' && message.recommendations && (
+                    <div className="message-actions-wrapper">
+                      <button 
+                        type="button" 
+                        className="inline-view-businesses-btn"
+                        onClick={() => onViewRecommendations?.(message.recommendations)}
+                      >
+                        🏬 View Businesses ({message.recommendations.length})
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+            
+            {isLoading && (
+              <div className="message-wrapper bot">
+                <div className="message bot ai-status-loading">
+                  <span className="status-pulse-dot"></span>
+                  <span className="status-text">{loadingTasks[loadingStep]}</span>
+                </div>
+              </div>
+            )}
+          </div>
       </div>
 
       <form className={`chat-input-card ${hasText ? 'has-text' : ''}`} onSubmit={handleSubmit}>

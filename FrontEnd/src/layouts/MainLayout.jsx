@@ -172,7 +172,15 @@ export default function MainLayout({ user,setUser, isBooting }) {
       const backendRecommendations = adaptChatMatchesToRecommendations(result, message);
 
       setMessages((prev) => {
-        const next = [...prev, { id: crypto.randomUUID(), sender: 'bot', text: reply }];
+        // ✨ Look here: We embed recommendations directly into this specific bot message object
+        const botMessage = { 
+          id: crypto.randomUUID(), 
+          sender: 'bot', 
+          text: reply,
+          recommendations: backendRecommendations && backendRecommendations.length > 0 ? backendRecommendations : null
+        };
+        
+        const next = [...prev, botMessage];
         const formattedHistoryMessages = next.map(({ sender, text }) => ({ sender, text }));
 
         if (user) {
@@ -205,8 +213,15 @@ export default function MainLayout({ user,setUser, isBooting }) {
       const fallbackRecommendations = getFallbackRecommendations(message);
       
       saveCurrentConversation(message, fallbackReply);
+      
+      // ✨ Embed fallback recommendations directly into the fallback bot message too
+      setMessages((prev) => [...prev, { 
+        id: crypto.randomUUID(), 
+        sender: 'bot', 
+        text: fallbackReply,
+        recommendations: fallbackRecommendations 
+      }]);
       openRecommendationDrawer(fallbackRecommendations, { storeAsAiRecommendation: true });
-      setMessages((prev) => [...prev, { id: crypto.randomUUID(), sender: 'bot', text: fallbackReply }]);
     } finally {
       setIsChatLoading(false);
     }
@@ -264,7 +279,8 @@ export default function MainLayout({ user,setUser, isBooting }) {
               setInputValue={setMessageInput}
               onSendMessage={handleSendMessage}
               isLoading={isChatLoading}
-              onOpenSidebar={user ? openMobileSidebar : undefined} // Disable sidebar burger trigger if guest
+              onOpenSidebar={user ? openMobileSidebar : undefined}
+              onViewRecommendations={(recs) => openRecommendationDrawer(recs, { storeAsAiRecommendation: false })} // Open drawer without wiping out global historic state
             />
           } />
 
@@ -292,7 +308,7 @@ export default function MainLayout({ user,setUser, isBooting }) {
           </button>
         ) : 
             <button className="dashboard-floating-button" onClick={() => { navigate('/login'); setIsMobileSidebarOpen(false); }} type="button">
-                Login
+                Expose Your Business
             </button>
         }
       </main>

@@ -131,8 +131,10 @@ function BranchRow({ branch }) {
   return (
     <article className="dashboard-row">
       <div>
-        <h3>{branch.branchName}</h3>
-        <p>{branch.contactNumber || 'No contact number'}</p>
+        <h3>
+          {branch.branchName}</h3>
+        <p>
+          {branch.contactNumber || 'No contact number'}</p>
         <p>Coordinates: {coords.join(', ') || 'Not available'}</p>
       </div>
       <span className="meta-pill">Active</span>

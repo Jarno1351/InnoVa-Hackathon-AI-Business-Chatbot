@@ -140,7 +140,7 @@ button { border: 0; cursor: pointer; }
 .shop-details-row { color: var(--text-muted); font-size: .84rem; }
 .shop-rating { color: var(--text-soft); font-weight: 700; }
 .shop-rating span { color: var(--gold); }
-.view-shop-button { min-height: 46px; border-radius: 14px; color: #fff; font-weight: 900; background: linear-gradient(135deg, var(--purple-bright), var(--purple)); box-shadow: 0 12px 34px rgba(139,53,238,.24); transition: transform .2s ease, filter .2s ease; }
+.view-shop-button { min-height: 46px; border-radius: 8px; color: #fff; font-weight: 600; background: linear-gradient(135deg, var(--purple-bright), var(--purple)); box-shadow: 0 12px 34px rgba(139,53,238,.24); transition: transform .2s ease, filter .2s ease; font-size: 14px;}
 .view-shop-button:hover { transform: translateY(-1px); filter: brightness(1.08); }
 .empty-state { grid-column: 1 / -1; padding: 28px; border-radius: 18px; background: rgba(255,255,255,.05); color: var(--text-soft); }
 
@@ -984,13 +984,13 @@ button { border: 0; cursor: pointer; }
 .dashboard-avatar { width: 84px; height: 84px; border-radius: 999px; background: linear-gradient(135deg, var(--purple-bright), var(--purple)); color: white; display: grid; place-items: center; font-size: 2rem; font-weight: 900; }
 .dashboard-hero h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 3rem); letter-spacing: -.05em; }
 .dashboard-hero p:not(.top-kicker) { margin: 6px 0 0; color: var(--text-muted); }
-.dashboard-tabs { display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,.08); }
-.dashboard-tabs button { background: transparent; color: var(--text-muted); padding: 14px 18px; font-weight: 900; text-transform: uppercase; letter-spacing: .05em; border-bottom: 3px solid transparent; }
+.dashboard-tabs { display: flex; gap: 8px; border-bottom: 1px solid rgba(255,255,255,.08); font-size: 14px;}
+.dashboard-tabs button { background: transparent; color: var(--text-muted); padding: 14px 18px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; border-bottom: 3px solid transparent; }
 .dashboard-tabs button.active { color: var(--purple-bright); border-bottom-color: var(--purple-bright); }
 .dashboard-action-row { display: flex; justify-content: flex-end; }
 .dashboard-add { width: auto; padding: 0 18px; }
 .dashboard-list { display: flex; flex-direction: column; gap: 12px; }
-.dashboard-row { background: rgba(34,33,41,.92); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.dashboard-row { background: rgba(34,33,41,.92); border: 1px solid rgba(255,255,255,.08); border-radius: spx; padding: 18px; display: flex; justify-content: space-between; gap: 16px; align-items: center; }
 .dashboard-row h3 { margin: 0 0 6px; }
 .dashboard-row p { margin: 4px 0; color: var(--text-muted); }
 .catalog-group { cursor: pointer; }
